@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>UMKM AI — Platform AI untuk Bisnis Kamu</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-inner">
+      <div class="nav-logo">
+        <span class="logo-icon">⬡</span>
+        <span class="logo-text">UMKM<span class="logo-accent">AI</span></span>
+      </div>
+
+      <div class="nav-tabs">
+        <button class="nav-tab active" data-section="dashboard" onclick="showSection('dashboard', this)">Dashboard</button>
+        <button class="nav-tab" data-section="deskripsi" onclick="showSection('deskripsi', this)">Deskripsi</button>
+        <button class="nav-tab" data-section="promosi" onclick="showSection('promosi', this)">Promosi</button>
+        <button class="nav-tab" data-section="harga" onclick="showSection('harga', this)">Harga</button>
+        <button class="nav-tab" data-section="konten" onclick="showSection('konten', this)">Konten</button>
+        <button class="nav-tab" data-section="chat" onclick="showSection('chat', this)">AI Chat</button>
+      </div>
+
+      <div class="nav-actions">
+        <button class="btn-dark-toggle" id="darkToggle" onclick="toggleDark()" title="Toggle dark mode">
+          <span class="icon-sun">☀</span>
+          <span class="icon-moon">☽</span>
+        </button>
+        <button class="btn-hamburger" id="hamburger" onclick="toggleMobileMenu()">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile menu -->
+    <div class="mobile-menu" id="mobileMenu">
+      <button class="nav-tab" data-section="dashboard" onclick="showSection('dashboard', this); toggleMobileMenu()">Dashboard</button>
+      <button class="nav-tab" data-section="deskripsi" onclick="showSection('deskripsi', this); toggleMobileMenu()">Deskripsi</button>
+      <button class="nav-tab" data-section="promosi" onclick="showSection('promosi', this); toggleMobileMenu()">Promosi</button>
+      <button class="nav-tab" data-section="harga" onclick="showSection('harga', this); toggleMobileMenu()">Harga</button>
+      <button class="nav-tab" data-section="konten" onclick="showSection('konten', this); toggleMobileMenu()">Konten</button>
+      <button class="nav-tab" data-section="chat" onclick="showSection('chat', this); toggleMobileMenu()">AI Chat</button>
+    </div>
+  </nav>
+
+  <!-- MAIN CONTENT -->
+  <main class="main">
+
+    <!-- ======================== DASHBOARD ======================== -->
+    <section id="dashboard" class="section active">
+
+      <!-- Hero -->
+      <div class="hero">
+        <div class="hero-badge">✦ Powered by Groq AI</div>
+        <h1 class="hero-title">Boost UMKM<br/><span class="gradient-text">dengan Kecerdasan AI</span></h1>
+        <p class="hero-sub">Platform AI modern untuk membantu UMKM kamu tumbuh — dari deskripsi produk, strategi promosi, hingga analisis harga.</p>
+        <div class="hero-cta">
+          <button class="btn-primary" onclick="showSection('deskripsi', document.querySelector('[data-section=deskripsi]'))">Mulai Generate ↗</button>
+          <button class="btn-ghost" onclick="showSection('chat', document.querySelector('[data-section=chat]'))">Coba AI Chat</button>
+        </div>
+        <div class="hero-glow"></div>
+      </div>
+
+      <!-- Stats -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon">⚡</div>
+          <div class="stat-value" data-target="1248" id="stat1">0</div>
+          <div class="stat-label">Total Generate</div>
+          <div class="stat-bar"><div class="stat-fill" style="width:78%"></div></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">🎯</div>
+          <div class="stat-value" data-target="342" id="stat2">0</div>
+          <div class="stat-label">Produk Dibantu</div>
+          <div class="stat-bar"><div class="stat-fill" style="width:55%"></div></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">💬</div>
+          <div class="stat-value" data-target="89" id="stat3">0</div>
+          <div class="stat-label">AI Chat Session</div>
+          <div class="stat-bar"><div class="stat-fill" style="width:42%"></div></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">✦</div>
+          <div class="stat-value" data-target="97" id="stat4">0</div>
+          <div class="stat-label">Akurasi AI (%)</div>
+          <div class="stat-bar"><div class="stat-fill" style="width:97%"></div></div>
+        </div>
+      </div>
+
+      <!-- Feature cards -->
+      <div class="features-title">Fitur Tersedia</div>
+      <div class="features-grid">
+        <div class="feature-card" onclick="showSection('deskripsi', document.querySelector('[data-section=deskripsi]'))">
+          <div class="feature-icon">📝</div>
+          <div class="feature-name">Deskripsi Produk</div>
+          <div class="feature-desc">Generate deskripsi produk yang menarik dan persuasif otomatis</div>
+          <div class="feature-arrow">→</div>
+        </div>
+        <div class="feature-card" onclick="showSection('promosi', document.querySelector('[data-section=promosi]'))">
+          <div class="feature-icon">📣</div>
+          <div class="feature-name">Strategi Promosi</div>
+          <div class="feature-desc">Saran promosi untuk Instagram, TikTok, dan WhatsApp</div>
+          <div class="feature-arrow">→</div>
+        </div>
+        <div class="feature-card" onclick="showSection('harga', document.querySelector('[data-section=harga]'))">
+          <div class="feature-icon">💰</div>
+          <div class="feature-name">Analisis Harga</div>
+          <div class="feature-desc">Rekomendasi harga jual optimal berdasarkan modal dan kompetitor</div>
+          <div class="feature-arrow">→</div>
+        </div>
+        <div class="feature-card" onclick="showSection('konten', document.querySelector('[data-section=konten]'))">
+          <div class="feature-icon">🎨</div>
+          <div class="feature-name">Ide Konten</div>
+          <div class="feature-desc">Generate caption, hashtag, dan ide konten sosial media</div>
+          <div class="feature-arrow">→</div>
+        </div>
+        <div class="feature-card" onclick="showSection('chat', document.querySelector('[data-section=chat]'))">
+          <div class="feature-icon">🤖</div>
+          <div class="feature-name">AI Chat</div>
+          <div class="feature-desc">Tanya apa saja seputar bisnis dan strategi UMKM</div>
+          <div class="feature-arrow">→</div>
+        </div>
+        <div class="feature-card coming">
+          <div class="feature-icon">📊</div>
+          <div class="feature-name">Analytics <span class="badge-soon">Soon</span></div>
+          <div class="feature-desc">Pantau performa bisnis dan insight AI secara real-time</div>
+          <div class="feature-arrow">→</div>
+        </div>
+      </div>
+
+      <!-- History -->
+      <div class="history-section">
+        <div class="section-header">
+          <div class="section-title">Riwayat Generate</div>
+          <button class="btn-clear" onclick="clearHistory()">Hapus Semua</button>
+        </div>
+        <div id="historyList" class="history-list">
+          <div class="history-empty">Belum ada riwayat. Mulai generate sekarang!</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================== DESKRIPSI PRODUK ======================== -->
+    <section id="deskripsi" class="section">
+      <div class="page-header">
+        <div class="page-title">Generate Deskripsi Produk</div>
+        <div class="page-sub">Buat deskripsi produk yang menarik dan persuasif dengan AI</div>
+      </div>
+
+      <div class="form-card">
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label">Nama Produk <span class="req">*</span></label>
+            <input class="form-input" id="dp-nama" type="text" placeholder="contoh: Keripik Tempe Pedas" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Kategori <span class="req">*</span></label>
+            <input class="form-input" id="dp-kategori" type="text" placeholder="contoh: Makanan Ringan" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Keunggulan Produk <span class="req">*</span></label>
+          <textarea class="form-textarea" id="dp-keunggulan" placeholder="contoh: renyah, pedas level 1-5, tanpa pengawet, kemasan premium"></textarea>
+        </div>
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label">Target Pasar</label>
+            <input class="form-input" id="dp-target" type="text" placeholder="contoh: Mahasiswa, ibu rumah tangga" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Harga Jual</label>
+            <input class="form-input" id="dp-harga" type="text" placeholder="contoh: Rp 15.000" />
+          </div>
+        </div>
+        <div class="form-actions">
+          <button class="btn-ghost" onclick="randomExample('deskripsi')">🎲 Contoh Random</button>
+          <button class="btn-ghost" onclick="resetForm('deskripsi')">↺ Reset</button>
+          <button class="btn-primary" id="dp-btn" onclick="generateDeskripsi()">✦ Generate AI</button>
+        </div>
+      </div>
+
+      <div id="dp-result" class="result-card hidden">
+        <div class="result-header">
+          <div class="result-title">✦ Hasil AI</div>
+          <div class="result-actions">
+            <button class="btn-icon" onclick="copyResult('dp-output')" title="Copy">⎘</button>
+            <button class="btn-icon" onclick="downloadResult('dp-output', 'deskripsi-produk')" title="Download">↓</button>
+            <button class="btn-icon" onclick="generateDeskripsi()" title="Regenerate">↻</button>
+          </div>
+        </div>
+        <div id="dp-output" class="result-output"></div>
+      </div>
+    </section>
+
+    <!-- ======================== STRATEGI PROMOSI ======================== -->
+    <section id="promosi" class="section">
+      <div class="page-header">
+        <div class="page-title">Strategi Promosi</div>
+        <div class="page-sub">Dapatkan strategi promosi di Instagram, TikTok, dan WhatsApp</div>
+      </div>
+
+      <div class="form-card">
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label">Nama Produk <span class="req">*</span></label>
+            <input class="form-input" id="sp-nama" type="text" placeholder="contoh: Keripik Tempe Pedas" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Target Pasar <span class="req">*</span></label>
+            <input class="form-input" id="sp-target" type="text" placeholder="contoh: Mahasiswa usia 18-25 tahun" />
+          </div>
+        </div>
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label">Budget Promosi <span class="req">*</span></label>
+            <input class="form-input" id="sp-budget" type="text" placeholder="contoh: Rp 500.000/bulan" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Platform Utama</label>
+            <input class="form-input" id="sp-platform" type="text" placeholder="contoh: Instagram, TikTok" />
+          </div>
+        </div>
+        <div class="form-actions">
+          <button class="btn-ghost" onclick="randomExample('promosi')">🎲 Contoh Random</button>
+          <button class="btn-ghost" onclick="resetForm('promosi')">↺ Reset</button>
+          <button class="btn-primary" id="sp-btn" onclick="generatePromosi()">✦ Generate AI</button>
+        </div>
+      </div>
+
+      <div id="sp-result" class="result-card hidden">
+        <div class="result-header">
+          <div class="result-title">✦ Hasil AI</div>
+          <div class="result-actions">
+            <button class="btn-icon" onclick="copyResult('sp-output')" title="Copy">⎘</button>
+            <button class="btn-icon" onclick="downloadResult('sp-output', 'strategi-promosi')" title="Download">↓</button>
+            <button class="btn-icon" onclick="generatePromosi()" title="Regenerate">↻</button>
+          </div>
+        </div>
+        <div id="sp-output" class="result-output"></div>
+      </div>
+    </section>
+
+    <!-- ======================== ANALISIS HARGA ======================== -->
+    <section id="harga" class="section">
+      <div class="page-header">
+        <div class="page-title">Analisis Harga</div>
+        <div class="page-sub">Rekomendasi harga jual yang optimal berdasarkan modal dan kompetitor</div>
+      </div>
+
+      <div class="form-card">
+        <div class="form-group">
+          <label class="form-label">Nama Produk <span class="req">*</span></label>
+          <input class="form-input" id="ah-nama" type="text" placeholder="contoh: Keripik Tempe Pedas" />
+        </div>
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label">Modal per Unit (Rp) <span class="req">*</span></label>
+            <input class="form-input" id="ah-modal" type="number" placeholder="contoh: 5000" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Harga Kompetitor (Rp) <span class="req">*</span></label>
+            <input class="form-input" id="ah-kompetitor" type="number" placeholder="contoh: 10000" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Keterangan Tambahan</label>
+          <input class="form-input" id="ah-keterangan" type="text" placeholder="contoh: produk premium, target pasar menengah atas" />
+        </div>
+        <div class="form-actions">
+          <button class="btn-ghost" onclick="randomExample('harga')">🎲 Contoh Random</button>
+          <button class="btn-ghost" onclick="resetForm('harga')">↺ Reset</button>
+          <button class="btn-primary" id="ah-btn" onclick="generateHarga()">✦ Analisis AI</button>
+        </div>
+      </div>
+
+      <div id="ah-result" class="result-card hidden">
+        <div class="result-header">
+          <div class="result-title">✦ Hasil AI</div>
+          <div class="result-actions">
+            <button class="btn-icon" onclick="copyResult('ah-output')" title="Copy">⎘</button>
+            <button class="btn-icon" onclick="downloadResult('ah-output', 'analisis-harga')" title="Download">↓</button>
+            <button class="btn-icon" onclick="generateHarga()" title="Regenerate">↻</button>
+          </div>
+        </div>
+        <div id="ah-output" class="result-output"></div>
+      </div>
+    </section>
+
+    <!-- ======================== IDE KONTEN ======================== -->
+    <section id="konten" class="section">
+      <div class="page-header">
+        <div class="page-title">Ide Konten & Caption</div>
+        <div class="page-sub">Generate caption, hashtag, dan ide konten sosial media untuk produk kamu</div>
+      </div>
+
+      <div class="form-card">
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label">Nama Produk <span class="req">*</span></label>
+            <input class="form-input" id="ik-nama" type="text" placeholder="contoh: Keripik Tempe Pedas" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Platform <span class="req">*</span></label>
+            <input class="form-input" id="ik-platform" type="text" placeholder="contoh: Instagram, TikTok" />
+          </div>
+        </div>
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label">Tone / Gaya Bahasa</label>
+            <input class="form-input" id="ik-tone" type="text" placeholder="contoh: santai, profesional, lucu" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Target Audiens</label>
+            <input class="form-input" id="ik-audiens" type="text" placeholder="contoh: anak muda, ibu-ibu" />
+          </div>
+        </div>
+        <div class="form-actions">
+          <button class="btn-ghost" onclick="randomExample('konten')">🎲 Contoh Random</button>
+          <button class="btn-ghost" onclick="resetForm('konten')">↺ Reset</button>
+          <button class="btn-primary" id="ik-btn" onclick="generateKonten()">✦ Generate AI</button>
+        </div>
+      </div>
+
+      <div id="ik-result" class="result-card hidden">
+        <div class="result-header">
+          <div class="result-title">✦ Hasil AI</div>
+          <div class="result-actions">
+            <button class="btn-icon" onclick="copyResult('ik-output')" title="Copy">⎘</button>
+            <button class="btn-icon" onclick="downloadResult('ik-output', 'ide-konten')" title="Download">↓</button>
+            <button class="btn-icon" onclick="generateKonten()" title="Regenerate">↻</button>
+          </div>
+        </div>
+        <div id="ik-output" class="result-output"></div>
+      </div>
+    </section>
+
+    <!-- ======================== AI CHAT ======================== -->
+    <section id="chat" class="section">
+      <div class="page-header">
+        <div class="page-title">AI Chat Assistant</div>
+        <div class="page-sub">Tanya apa saja seputar strategi bisnis dan UMKM</div>
+      </div>
+
+      <div class="chat-container">
+        <div class="chat-messages" id="chatMessages">
+          <div class="chat-bubble ai">
+            <div class="bubble-icon">⬡</div>
+            <div class="bubble-text">Halo! Saya AI Assistant untuk UMKM kamu. Tanya apa saja tentang bisnis, strategi, pemasaran, atau tips mengelola UMKM! 🚀</div>
+          </div>
+        </div>
+        <div class="chat-input-area">
+          <input class="chat-input" id="chatInput" type="text" placeholder="Tanya sesuatu tentang bisnis kamu..." onkeypress="if(event.key==='Enter') kirimChat()" />
+          <button class="btn-send" onclick="kirimChat()">↗</button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Toast -->
+  <div id="toast" class="toast"></div>
+
+  <!-- Back to top -->
+  <button class="back-to-top" id="backToTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+  <script src="script.js"></script>
+</body>
+</html>
