@@ -101,7 +101,10 @@ function setLoading(outputId, resultId) {
 }
 
 function setResult(outputId, text) {
-  document.getElementById(outputId).innerText = text;
+  const html = text
+    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\n/g, '<br>');
+  document.getElementById(outputId).innerHTML = html;
 }
 // ======================
 // HISTORY
