@@ -8,7 +8,7 @@ import os
 load_dotenv()
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, origins=["https://aktra-dev.github.io", "http://127.0.0.1:5500", "http://localhost:5500"])
 
 client = Groq(api_key=os.getenv("GROQ_API_KEY"))
 supabase = create_client(os.getenv("SUPABASE_URL"), os.getenv("SUPABASE_KEY"))
