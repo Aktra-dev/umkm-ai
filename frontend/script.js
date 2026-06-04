@@ -1,3 +1,154 @@
+// ======================
+// AUTH
+// ======================
+let currentToken = localStorage.getItem("umkm_token") || null;
+let currentUser = JSON.parse(localStorage.getItem("umkm_user") || "null");
+
+function checkAuth() {
+  if (currentToken) {
+    showApp();
+  } else {
+    showLoginPage();
+  }
+}
+
+function showLoginPage() {
+  document.getElementById("loginPage").classList.remove("hidden");
+  document.getElementById("navbar").style.display = "none";
+  document.querySelector(".main").style.display = "none";
+}
+
+function showApp() {
+  document.getElementById("loginPage").classList.add("hidden");
+  document.getElementById("navbar").style.display = "";
+  document.querySelector(".main").style.display = "";
+
+  // Tampilkan email user di navbar
+  const email = currentUser?.email || "";
+  const existing = document.getElementById("userEmail");
+  if (!existing && email) {
+    const btn = document.createElement("span");
+    btn.id = "userEmail";
+    btn.style.cssText = "font-size:13px;color:var(--text-sub);margin-right:4px;";
+    btn.textContent = email;
+
+    const logoutBtn = document.createElement("button");
+    logoutBtn.className = "btn-ghost";
+    logoutBtn.style.cssText = "padding:6px 12px;font-size:13px;";
+    logoutBtn.textContent = "Keluar";
+    logoutBtn.onclick = doLogout;
+
+    const navActions = document.querySelector(".nav-actions");
+    navActions.insertBefore(logoutBtn, navActions.firstChild);
+    navActions.insertBefore(btn, navActions.firstChild);
+  }
+}
+
+function switchAuthTab(tab, btn) {
+  document.querySelectorAll(".login-tab").forEach(t => t.classList.remove("active"));
+  btn.classList.add("active");
+
+  if (tab === "login") {
+    document.getElementById("formLogin").classList.remove("hidden");
+    document.getElementById("formRegister").classList.add("hidden");
+  } else {
+    document.getElementById("formLogin").classList.add("hidden");
+    document.getElementById("formRegister").classList.remove("hidden");
+  }
+}
+
+async function doLogin() {
+  const email = document.getElementById("login-email").value;
+  const password = document.getElementById("login-password").value;
+  const errEl = document.getElementById("login-error");
+
+  errEl.classList.add("hidden");
+
+  if (!email || !password) {
+    errEl.textContent = "Email dan password wajib diisi";
+    errEl.classList.remove("hidden");
+    return;
+  }
+
+  try {
+    const res = await fetch(`${API_URL}/api/login`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password })
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      errEl.textContent = data.error || "Login gagal";
+      errEl.classList.remove("hidden");
+      return;
+    }
+
+    currentToken = data.access_token;
+    currentUser = data.user;
+    localStorage.setItem("umkm_token", currentToken);
+    localStorage.setItem("umkm_user", JSON.stringify(currentUser));
+    showApp();
+
+  } catch {
+    errEl.textContent = "Terjadi error, coba lagi";
+    errEl.classList.remove("hidden");
+  }
+}
+
+async function doRegister() {
+  const email = document.getElementById("reg-email").value;
+  const password = document.getElementById("reg-password").value;
+  const errEl = document.getElementById("reg-error");
+  const sucEl = document.getElementById("reg-success");
+
+  errEl.classList.add("hidden");
+  sucEl.classList.add("hidden");
+
+  if (!email || !password) {
+    errEl.textContent = "Email dan password wajib diisi";
+    errEl.classList.remove("hidden");
+    return;
+  }
+
+  if (password.length < 6) {
+    errEl.textContent = "Password minimal 6 karakter";
+    errEl.classList.remove("hidden");
+    return;
+  }
+
+  try {
+    const res = await fetch(`${API_URL}/api/register`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password })
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      errEl.textContent = data.error || "Registrasi gagal";
+      errEl.classList.remove("hidden");
+      return;
+    }
+
+    sucEl.textContent = "Registrasi berhasil! Cek email untuk verifikasi, lalu login.";
+    sucEl.classList.remove("hidden");
+
+  } catch {
+    errEl.textContent = "Terjadi error, coba lagi";
+    errEl.classList.remove("hidden");
+  }
+}
+
+function doLogout() {
+  localStorage.removeItem("umkm_token");
+  localStorage.removeItem("umkm_user");
+  currentToken = null;
+  currentUser = null;
+  location.reload();
+}
 const API_URL = "https://umkm-ai-production.up.railway.app";
 
 // ======================
@@ -195,7 +346,22 @@ function saveHistory(type, preview) {
 
   renderHistory();
 }
+async function postData(endpoint, body) {
+  const res = await fetch(`${API_URL}${endpoint}`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${currentToken}`
+    },
+    body: JSON.stringify(body)
+  });
 
+  if (!res.ok) {
+    throw new Error("API Error");
+  }
+
+  return await res.json();
+}
 function renderHistory() {
   const history = JSON.parse(
     localStorage.getItem("umkm_history") || "[]"
@@ -215,14 +381,11 @@ function renderHistory() {
   }
 
   list.innerHTML = history.map((item, index) => `
-    <div
-      class="history-item"
-      onclick="lihatHistory(${index})"
-      style="cursor:pointer"
-    >
+    <div class="history-item" onclick="lihatHistory(${index})" style="cursor:pointer">
       <span class="history-type">${item.type}</span>
       <span class="history-preview">${escapeHTML(item.preview)}</span>
       <span class="history-time">${item.time}</span>
+      <button class="btn-history-delete" onclick="event.stopPropagation(); hapusHistory(${index})" title="Hapus">✕</button>
     </div>
   `).join("");
 }
@@ -278,25 +441,14 @@ function lihatHistory(index) {
     setResult(outputId, item.full);
   }, 100);
 }
-
-// ======================
-// API HELPER
-// ======================
-async function postData(endpoint, body) {
-  const res = await fetch(`${API_URL}${endpoint}`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify(body)
-  });
-
-  if (!res.ok) {
-    throw new Error("API Error");
-  }
-
-  return await res.json();
+function hapusHistory(index) {
+  const history = JSON.parse(localStorage.getItem("umkm_history") || "[]");
+  history.splice(index, 1);
+  localStorage.setItem("umkm_history", JSON.stringify(history));
+  renderHistory();
+  showToast("Riwayat dihapus");
 }
+
 
 // ======================
 // GENERATE DESKRIPSI
@@ -760,3 +912,4 @@ document.querySelectorAll(".stat-value")
 // INIT
 // ======================
 renderHistory();
+checkAuth();
