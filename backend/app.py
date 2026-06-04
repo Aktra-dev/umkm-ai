@@ -4,11 +4,16 @@ from groq import Groq
 from supabase import create_client
 from dotenv import load_dotenv
 import os
+import bcrypt
+import jwt
+import datetime
 
 load_dotenv()
 
 app = Flask(__name__)
 CORS(app, resources={r"/api/*": {"origins": "*"}}, allow_headers=["Content-Type", "Authorization"], methods=["GET", "POST", "OPTIONS"])
+
+JWT_SECRET = os.getenv("JWT_SECRET", "umkm-ai-secret-key-2024")
 
 client = Groq(api_key=os.getenv("GROQ_API_KEY"))
 supabase = create_client(os.getenv("SUPABASE_URL"), os.getenv("SUPABASE_KEY"))
@@ -32,18 +37,52 @@ def tanya_ai(prompt):
     )
     return response.choices[0].message.content
 
+def get_user_from_token():
+    auth_header = request.headers.get("Authorization")
+    if not auth_header or not auth_header.startswith("Bearer "):
+        return None
+    token = auth_header.split(" ")[1]
+    try:
+        payload = jwt.decode(token, JWT_SECRET, algorithms=["HS256"])
+        return payload
+    except:
+        return None
+
+# =========================
+# AUTH
+# =========================
 @app.route("/api/register", methods=["POST", "OPTIONS"])
 def register():
     if request.method == "OPTIONS":
         return jsonify({}), 200
+
     data = request.json
     email = data.get("email")
     password = data.get("password")
+
     if not email or not password:
         return jsonify({"error": "Email dan password wajib diisi"}), 400
+
+    if len(password) < 6:
+        return jsonify({"error": "Password minimal 6 karakter"}), 400
+
     try:
-        res = supabase.auth.sign_up({"email": email, "password": password})
-        return jsonify({"message": "Registrasi berhasil"})
+        # Cek email sudah ada
+        existing = supabase.table("users").select("id").eq("email", email).execute()
+        if existing.data:
+            return jsonify({"error": "Email sudah terdaftar"}), 400
+
+        # Hash password
+        password_hash = bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt()).decode("utf-8")
+
+        # Simpan ke database
+        supabase.table("users").insert({
+            "email": email,
+            "password_hash": password_hash
+        }).execute()
+
+        return jsonify({"message": "Registrasi berhasil! Silakan login."})
+
     except Exception as e:
         return jsonify({"error": str(e)}), 400
 
@@ -51,30 +90,45 @@ def register():
 def login():
     if request.method == "OPTIONS":
         return jsonify({}), 200
+
     data = request.json
     email = data.get("email")
     password = data.get("password")
+
     if not email or not password:
         return jsonify({"error": "Email dan password wajib diisi"}), 400
+
     try:
-        res = supabase.auth.sign_in_with_password({"email": email, "password": password})
+        # Cari user
+        result = supabase.table("users").select("*").eq("email", email).execute()
+        if not result.data:
+            return jsonify({"error": "Email atau password salah"}), 401
+
+        user = result.data[0]
+
+        # Cek password
+        if not bcrypt.checkpw(password.encode("utf-8"), user["password_hash"].encode("utf-8")):
+            return jsonify({"error": "Email atau password salah"}), 401
+
+        # Buat JWT token
+        payload = {
+            "user_id": user["id"],
+            "email": user["email"],
+            "exp": datetime.datetime.utcnow() + datetime.timedelta(days=7)
+        }
+        token = jwt.encode(payload, JWT_SECRET, algorithm="HS256")
+
         return jsonify({
-            "access_token": res.session.access_token,
-            "user": {"email": res.user.email, "id": str(res.user.id)}
+            "access_token": token,
+            "user": {"email": user["email"], "id": str(user["id"])}
         })
+
     except Exception as e:
-        return jsonify({"error": "Email atau password salah"}), 401
+        return jsonify({"error": str(e)}), 401
 
-def get_user_from_token():
-    auth_header = request.headers.get("Authorization")
-    if not auth_header or not auth_header.startswith("Bearer "):
-        return None
-    token = auth_header.split(" ")[1]
-    try:
-        return supabase.auth.get_user(token)
-    except:
-        return None
-
+# =========================
+# API AI
+# =========================
 @app.route("/api/deskripsi-produk", methods=["POST", "OPTIONS"])
 def deskripsi_produk():
     if request.method == "OPTIONS":
