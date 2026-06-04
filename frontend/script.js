@@ -26,22 +26,28 @@ function showApp() {
   // Tampilkan email user di navbar
   const email = currentUser?.email || "";
   const existing = document.getElementById("userEmail");
-  if (!existing && email) {
-    const btn = document.createElement("span");
-    btn.id = "userEmail";
-    btn.style.cssText = "font-size:13px;color:var(--text-sub);margin-right:4px;";
-    btn.textContent = email;
+  if (!document.getElementById("userEmail") && email) {
 
-    const logoutBtn = document.createElement("button");
-    logoutBtn.className = "btn-ghost";
-    logoutBtn.style.cssText = "padding:6px 12px;font-size:13px;";
-    logoutBtn.textContent = "Keluar";
-    logoutBtn.onclick = doLogout;
+  const userWrap = document.createElement("div");
+  userWrap.id = "userWrap";
 
-    const navActions = document.querySelector(".nav-actions");
-    navActions.insertBefore(logoutBtn, navActions.firstChild);
-    navActions.insertBefore(btn, navActions.firstChild);
-  }
+  userWrap.style.cssText = `
+    display:flex;
+    align-items:center;
+    gap:10px;
+  `;
+
+  userWrap.innerHTML = `
+    <span id="userEmail">${email}</span>
+    <button class="btn-ghost" onclick="doLogout()">
+      Keluar
+    </button>
+  `;
+
+  document
+    .querySelector(".nav-actions")
+    .prepend(userWrap);
+}
 }
 
 function switchAuthTab(tab, btn) {
