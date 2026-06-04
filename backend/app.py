@@ -56,35 +56,59 @@ def register():
     if request.method == "OPTIONS":
         return jsonify({}), 200
 
-    data = request.json
-    email = data.get("email")
-    password = data.get("password")
-
-    if not email or not password:
-        return jsonify({"error": "Email dan password wajib diisi"}), 400
-
-    if len(password) < 6:
-        return jsonify({"error": "Password minimal 6 karakter"}), 400
-
     try:
-        # Cek email sudah ada
-        existing = supabase.table("users").select("id").eq("email", email).execute()
+        data = request.json
+
+        print("REGISTER DATA:", data)
+
+        email = data.get("email")
+        password = data.get("password")
+
+        if not email or not password:
+            return jsonify({"error": "Email dan password wajib diisi"}), 400
+
+        if len(password) < 6:
+            return jsonify({"error": "Password minimal 6 karakter"}), 400
+
+        existing = (
+            supabase.table("users")
+            .select("*")
+            .eq("email", email)
+            .execute()
+        )
+
+        print("EXISTING:", existing.data)
+
         if existing.data:
             return jsonify({"error": "Email sudah terdaftar"}), 400
 
-        # Hash password
-        password_hash = bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt()).decode("utf-8")
+        password_hash = bcrypt.hashpw(
+            password.encode("utf-8"),
+            bcrypt.gensalt()
+        ).decode("utf-8")
 
-        # Simpan ke database
-        supabase.table("users").insert({
-            "email": email,
-            "password_hash": password_hash
-        }).execute()
+        print("HASH OK")
 
-        return jsonify({"message": "Registrasi berhasil! Silakan login."})
+        result = (
+            supabase.table("users")
+            .insert({
+                "email": email,
+                "password_hash": password_hash
+            })
+            .execute()
+        )
+
+        print("INSERT RESULT:", result.data)
+
+        return jsonify({
+            "message": "Registrasi berhasil"
+        })
 
     except Exception as e:
-        return jsonify({"error": str(e)}), 400
+        print("REGISTER ERROR:", str(e))
+        return jsonify({
+            "error": str(e)
+        }), 400
 
 @app.route("/api/login", methods=["POST", "OPTIONS"])
 def login():
