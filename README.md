@@ -25,7 +25,8 @@ UMKM AI Assistant adalah aplikasi web yang memanfaatkan AI (Groq API) untuk memb
 | Frontend | HTML, CSS, Vanilla JavaScript |
 | Backend | Python, Flask |
 | AI Provider | Groq API (llama-3.1-8b-instant) |
-| Deployment | Render (backend), GitHub Pages (frontend) |
+| Deployment | Railway (backend), GitHub Pages (frontend) |
+| Database | Supabase |
 
 ## 🚀 Cara Menjalankan
 
@@ -62,6 +63,7 @@ Buka `frontend/index.html` dengan Live Server di VS Code.
 - **AI Chat** — Tanya jawab bebas seputar bisnis UMKM
 - **Dark Mode** — Tampilan gelap/terang
 - **Riwayat Generate** — Tersimpan otomatis di browser
+- **login system** - Register & Login menggunakan email
 
 ## 📁 Struktur Project
 umkm-ai/
