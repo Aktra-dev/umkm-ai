@@ -6,8 +6,8 @@ Platform AI modern untuk membantu pelaku UMKM Indonesia berkembang dengan teknol
 
 | Nama | Role |
 |------|------|
-| Akbar Saputra | Backend Developer & AI Integration |
-| Galih Adhi Rahmadhani | Frontend Developer & UI/UX |
+| Akbar Saputra | Backend,Frontend Developer & UI/UX |
+| Galih Adhi Rahmadhani | AI  Integration|
 
 ## 📌 Deskripsi Project
 
