@@ -1238,11 +1238,158 @@ body {
     height:65vh;
   }
 
-  .chat-input-area{
-    flex-direction:column;
-  }
 
   .btn-send{
     width:100%;
   }
+}
+/* =========================
+   FIX MOBILE FINAL
+   ========================= */
+
+@media (max-width: 640px){
+
+  body{
+    overflow-x:hidden;
+  }
+
+  .navbar{
+    height:60px;
+  }
+
+  .main{
+    padding:
+      calc(var(--navbar-h) + 12px)
+      12px
+      40px;
+  }
+
+  .hero{
+    padding:28px 0 40px;
+    margin-bottom:20px;
+  }
+
+  .hero-title{
+    font-size:26px;
+    line-height:1.2;
+  }
+
+  .hero-sub{
+    font-size:14px;
+    line-height:1.6;
+    margin-bottom:24px;
+  }
+
+  .hero-cta{
+    flex-direction:column;
+  }
+
+  .hero-cta button{
+    width:100%;
+    justify-content:center;
+  }
+
+  .stats-grid{
+    grid-template-columns:1fr;
+  }
+
+  .stat-card{
+    padding:16px;
+  }
+
+  .features-title{
+    font-size:18px;
+  }
+
+  .feature-card{
+    padding:18px;
+  }
+
+  .page-title{
+    font-size:22px;
+    line-height:1.3;
+  }
+
+  .page-sub{
+    font-size:14px;
+  }
+
+  .form-card{
+    padding:16px;
+    border-radius:16px;
+  }
+
+  .form-actions{
+    flex-direction:column;
+    align-items:stretch;
+  }
+
+  .form-actions button{
+    width:100%;
+    justify-content:center;
+  }
+
+  .result-header{
+    padding:14px;
+  }
+
+  .result-actions{
+    gap:6px;
+  }
+
+  .result-output{
+    font-size:13px;
+    line-height:1.7;
+  }
+
+  .chat-container{
+    height:72vh;
+  }
+
+  .chat-messages{
+    padding:16px;
+  }
+
+  .chat-bubble{
+    max-width:100%;
+  }
+
+  .bubble-text{
+    font-size:13px;
+  }
+
+  .chat-input-area{
+    padding:12px;
+    flex-direction:row;
+  }
+
+  .chat-input{
+    font-size:13px;
+  }
+
+  .btn-send{
+    width:44px;
+    min-width:44px;
+  }
+
+  .history-item{
+    flex-direction:column;
+    align-items:flex-start;
+    gap:8px;
+  }
+
+  .history-preview{
+    white-space:normal;
+  }
+
+  .mobile-menu{
+    padding:12px;
+  }
+
+  .mobile-menu .nav-tab{
+    width:100%;
+    text-align:left;
+    padding:12px;
+  }
+
 }
